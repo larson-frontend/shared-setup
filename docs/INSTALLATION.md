@@ -69,3 +69,13 @@ shared-instructions/scripts/init-shared-instructions-vscode.sh \
 shared-instructions/scripts/init-shared-instructions-jetbrains.sh --non-interactive
 shared-instructions/scripts/init-shared-instructions-eclipse.sh --non-interactive
 ```
+
+- If a repo already has a real folder/file at `shared-instructions`, the installer will now refuse to delete it.
+  Use `--force` only when you intentionally want to replace that non-symlink target:
+```zsh
+./shared-instructions/scripts/install-shared-instructions.sh \
+  --non-interactive \
+  --target /absolute/path/to/repo \
+  --ide vscode \
+  --force
+```

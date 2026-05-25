@@ -22,6 +22,7 @@ set -euo pipefail
 #  --target <repo-path>    Repo directory to install symlink into
 #  --ide <vscode|jetbrains|eclipse>
 #  --non-interactive       Use provided --target and --ide without prompts
+#  --force                 Allow replacing an existing non-symlink target
 
 SCRIPT_DIR=$(cd -- "$(dirname "$0")" && pwd)
 DEFAULT_SHARED=$(realpath "$SCRIPT_DIR/..")
@@ -32,6 +33,7 @@ SHARED_PATH="$DEFAULT_SHARED"
 TARGET_REPO=""
 IDE_CHOICE=""
 NON_INTERACTIVE=false
+FORCE=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -40,12 +42,14 @@ while [[ $# -gt 0 ]]; do
     --target) TARGET_REPO="$2"; shift 2;;
     --ide) IDE_CHOICE="$2"; shift 2;;
     --non-interactive) NON_INTERACTIVE=true; shift;;
+    --force) FORCE=true; shift;;
     -h|--help)
       cat <<'USAGE'
 Interactive installer for shared-instructions.
 Examples:
   ./shared-instructions/scripts/install-shared-instructions.sh
   ./shared-instructions/scripts/install-shared-instructions.sh --non-interactive --target ./fasting-frontend --ide vscode
+  ./shared-instructions/scripts/install-shared-instructions.sh --target ./my-repo --ide vscode --non-interactive --force
 USAGE
       exit 0;;
     *) echo "Unknown argument: $1" >&2; exit 1;;
@@ -91,7 +95,7 @@ else
     TARGET_ABS=$(realpath "$custom" 2>/dev/null || true)
     [[ -z "$TARGET_ABS" || ! -d "$TARGET_ABS" ]] && { echo "Error: path not found: $custom" >&2; exit 1; }
   else
-    if [[ "$choice" != <-> ]]; then echo "Error: invalid selection" >&2; exit 1; fi
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then echo "Error: invalid selection" >&2; exit 1; fi
     idx=$choice
     count=${#candidates[@]}
     if (( idx < 1 || idx > count )); then echo "Error: selection out of range" >&2; exit 1; fi
@@ -115,8 +119,15 @@ if [[ -L "$LINK_TARGET" ]]; then
     echo "Symlink already correct in $REPO_NAME"
   fi
 elif [[ -e "$LINK_TARGET" ]]; then
+  if [[ "$FORCE" != true ]]; then
+    echo "Error: Destination exists and is not a symlink: $LINK_TARGET" >&2
+    echo "Refusing to delete it automatically because this can remove real project files." >&2
+    echo "If you want to replace it, rerun with --force:" >&2
+    echo "  $0 --target '$TARGET_ABS' --ide '${IDE_CHOICE:-vscode|jetbrains|eclipse}' --non-interactive --force" >&2
+    exit 1
+  fi
   rm -rf "$LINK_TARGET" && ln -s "$SHARED_ABS" "$LINK_TARGET"
-  echo "Replaced with symlink in $REPO_NAME"
+  echo "Replaced existing path with symlink in $REPO_NAME (--force)"
 else
   ln -s "$SHARED_ABS" "$LINK_TARGET"
   echo "Created symlink in $REPO_NAME -> $SHARED_ABS"
