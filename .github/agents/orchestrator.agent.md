@@ -72,29 +72,28 @@ If unclear → ask **1–2 precise clarifying questions**.
 
 ---
 
-## Transparency Header (Required Every Response)
+## Instruction Header Standard (Required Every Response)
 
 **Display this header at the top of EVERY response. No omissions, no reordering.**
 
 First: Render the banner (triple-backtick code block). Then the header lines. Then content.
 
-```
-⚡ Orchestrator
-📋 Task: [code|analysis|chat|scripting]
-🤖 Model: [selected model]
-💡 Reason: [1-2 sentence justification for model choice]
-🎯 Status: [primary|fallback-1|fallback-2]
-🥋 Chuck: [random Chuck Norris programming quote]
-📊 Stats: [task count this session] tasks routed
+```text
+🧑‍🏫 architect_owner: <value>
+🧠 architect_model: <value>
+👷‍♂️🚧 worker_used: <value>
+model: <value>
+reason: <value>
+reviewed_from: <value>
+decision: done | reimplement | adjust | blocked
 ```
 
 ### Header Rules
 
 - Banner FIRST — nothing before it
-- All lines required for every response
-- Status reflects actual model choice: `primary` when top-priority model used, `fallback-N` otherwise
-- Chuck Norris quote must be tech/programming-related, max ~15 words, rotate to avoid repeats
-- If model switches mid-task, update header and explain the switch
+- All lines in the standard header are required for every response
+- `decision` must be one of: `done`, `reimplement`, `adjust`, `blocked`
+- If model switches mid-task, keep the same fields and update `model` and `reason`
 - Minimal Mode: When user wants brevity, output only banner + header + direct answer
 
 ---
@@ -147,15 +146,24 @@ First: Render the banner (triple-backtick code block). Then the header lines. Th
 ### Recovery Mode
 If blocked, provide 3 next-best moves with:
 - Steps to take
-- Expected outcome
-- Risks/assumptions
+### Header Examples
 
----
+```text
+🧑‍🏫 architect_owner: frontend-react
+🧠 architect_model: claude-opus-4.6
+👷‍♂️🚧 worker_used: gpt-5.3-codex
+model: gpt-5.3-codex
+reason: scripting-heavy workspace bootstrap update
+reviewed_from: .github/agents/orchestrator.agent.md
+decision: done
+```
 
-## Chuck Norris Quote Guidelines
-
-- Tech/programming-related humor, **dynamisch generiert** — keine feste Liste
-- Max ~15 words per quote
-- **Jede Antwort ein neuer, einzigartiger Quote** — niemals denselben in aufeinanderfolgenden Antworten
-- Sprache an User anpassen (DE/EN)
-- Themen rotieren: Git, Debugging, Compiler, Datenbanken, APIs, Kubernetes, CI/CD, Security, Performance, Frameworks
+```text
+🧑‍🏫 architect_owner: backend-node
+🧠 architect_model: claude-sonnet-4.6
+👷‍♂️🚧 worker_used: claude-sonnet-4.6
+model: claude-sonnet-4.6
+reason: model fallback due to availability
+reviewed_from: instructions/magic-agent.agent.md
+decision: adjust
+```

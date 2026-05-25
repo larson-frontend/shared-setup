@@ -38,6 +38,56 @@ Es enthält:
 
 ## Schnellstart
 
+## Portable Team Bootstrap
+
+Diese Vorlage ist jetzt als portable Bootstrap-Basis fuer drei typische Team-Profile ausgelegt:
+
+| Profil | Launch-Profile | Aufgaben (Tasks) |
+|---|---|---|
+| FE (Vite) | FE: Vite Dev (Open Chrome), FE: Vite Dev (Attach Chrome) | FE: Install Dependencies, FE: Start Vite Dev, FE: Run Tests |
+| Node BE | BE Node: Run (9229), BE Node: Attach (9229) | Node BE: Install Dependencies, Node BE: Start Dev (Inspect 9229), Node BE: Run Tests |
+| Java/Tomcat | Java/Tomcat: Attach (5005), Java/Tomcat: Start Hook + Attach (5005) | Java: Build (Wrapper Auto), Java: Run App (Wrapper Auto), Tomcat: Start Hook (Placeholder) |
+| Cypress / E2E | Cypress: Open (Interactive), Cypress: Run (Headless) | Cypress: Open, Cypress: Run (Headless) |
+
+### QA-Tasks (Qualitaetssicherung)
+
+Die folgenden Tasks setzen voraus, dass das jeweilige npm-Skript in `package.json` vorhanden ist:
+
+| Task | npm-Skript | Beschreibung |
+|---|---|---|
+| `FE: Lint` | `npm run lint` | ESLint ueber das gesamte Projekt |
+| `FE: Typecheck` | `npm run typecheck` | TypeScript-Prüfung ohne Emit (`tsc --noEmit`) |
+| `FE: Format Check` | `npm run format:check` | Prettier prüft Formatierung |
+| `FE: Format Fix` | `npm run format:fix` | Prettier formatiert alle Dateien |
+| `Cypress: Open` | `npm run cy:open` | Cypress interaktiv öffnen |
+| `Cypress: Run (Headless)` | `npm run cy:ci` | Cypress headless (CI-Mode) |
+| `Quality Gate (FE/Node quick)` | *(dependsOn)* | Führt Lint → Typecheck → Tests sequenziell aus |
+
+> **Cypress-Skript-Namen:** Das Template erwartet `cy:open` und `cy:ci` in `package.json`. Passe die Namen in `tasks.json` und `launch.json` an, falls dein Projekt andere Skriptnamen verwendet (z.B. `cypress:open`, `e2e`).
+
+### Instruction Header Standard (Pflicht)
+
+Alle Agent-Antworten und Governance-Beispiele sollen denselben Header-Block verwenden:
+
+```text
+🧑‍🏫 architect_owner: <value>
+🧠 architect_model: <value>
+👷‍♂️🚧 worker_used: <value>
+model: <value>
+reason: <value>
+reviewed_from: <value>
+decision: done | reimplement | adjust | blocked
+```
+
+### Quickstart fuer neue Teammitglieder
+
+1. Repository clonen und im Zielprojekt als Shared-Standard einbinden (Symlink oder Kopie, siehe unten).
+2. VS Code in deinem Projekt oeffnen und pruefen, dass `.vscode/launch.json` und `.vscode/tasks.json` vorhanden sind.
+3. Fuer FE zuerst Task FE: Install Dependencies ausfuehren, danach FE: Start Vite Dev starten.
+4. Fuer Node BE zuerst Node BE: Install Dependencies ausfuehren, danach BE Node: Run (9229) oder Node BE: Start Dev (Inspect 9229) nutzen.
+5. Fuer Java/Tomcat zuerst Java: Build (Wrapper Auto) pruefen, dann Java/Tomcat: Attach (5005) verwenden; optional den Platzhalter-Task Tomcat: Start Hook (Placeholder) auf euer Startskript mappen.
+6. Fuer Release-Automation auf main reicht der Workflow Release; lokal kann npm run release:dry zur Vorpruefung genutzt werden.
+
 ### 1. Repo clonen
 
 ```bash
@@ -114,6 +164,8 @@ Der [Artikel](docs/VS_CODE_TEAM_STANDARD_COURSE.md) erklärt jeden Baustein im D
 | 3 | Debug-Profile | `.vscode/launch.json` | Debugging funktioniert auf jedem Rechner |
 | 4 | Task Runner | `.vscode/tasks.json` | Standardisierte Dev-Abläufe |
 | 5 | MCP Server | `.vscode/mcp.json` | AI-Agents mit GitHub & Filesystem verbinden |
+
+> **MCP-Voraussetzung:** `"chat.mcp.enabled": true` ist in `settings.json` gesetzt und erforderlich, damit MCP-Server (GitHub, Filesystem) von Copilot-Agenten genutzt werden können. Ohne diese Einstellung sind Agent-Tools deaktiviert.
 | 6 | Copilot Instructions | `.github/copilot-instructions.md` | AI kennt eure Architektur und Regeln |
 | 7 | File-Instructions | `.github/instructions/*.md` | Bereichsspezifische AI-Regeln |
 | 8 | Custom Agents | `.github/agents/*.md` | Spezialisierte AI-Workflows |

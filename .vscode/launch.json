@@ -2,63 +2,74 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Frontend: Vite",
-            "type": "node-terminal",
+            "name": "FE: Vite Dev (Open Chrome)",
+            "type": "pwa-chrome",
             "request": "launch",
-            "command": "npm run dev",
-            "cwd": "${workspaceFolder}"
+            "url": "http://localhost:${input:fePort}",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "FE: Start Vite Dev"
         },
         {
-            "name": "Frontend: Vite (Mocks)",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "npm run dev:mock",
-            "cwd": "${workspaceFolder}"
+            "name": "FE: Vite Dev (Attach Chrome)",
+            "type": "pwa-chrome",
+            "request": "attach",
+            "port": 9222,
+            "webRoot": "${workspaceFolder}"
         },
         {
-            "name": "BFF: Node Debug",
+            "name": "BE Node: Run (9229)",
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "npm",
             "runtimeArgs": ["run", "dev"],
             "cwd": "${workspaceFolder}",
+            "env": {
+                "NODE_OPTIONS": "--inspect=9229"
+            },
             "console": "integratedTerminal",
             "restart": true,
             "skipFiles": ["<node_internals>/**"]
         },
         {
-            "name": "BFF: Node Debug (Mock Mode)",
+            "name": "BE Node: Attach (9229)",
             "type": "node",
-            "request": "launch",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": ["run", "dev"],
-            "cwd": "${workspaceFolder}",
-            "env": { "ENABLE_MOCK_MODE": "true" },
-            "console": "integratedTerminal",
+            "request": "attach",
+            "port": 9229,
             "restart": true,
             "skipFiles": ["<node_internals>/**"]
         },
         {
-            "name": "Backend: Spring Boot",
+            "name": "Java/Tomcat: Attach (5005)",
             "type": "java",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 5005
+        },
+        {
+            "name": "Java/Tomcat: Start Hook + Attach (5005)",
+            "type": "java",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 5005,
+            "preLaunchTask": "Tomcat: Start Hook (Placeholder)"
+        },
+        {
+            "name": "Cypress: Open (Interactive)",
+            "type": "node",
             "request": "launch",
-            "mainClass": "com.example.Application",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "cy:open"],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         },
         {
-            "name": "Cypress: Open",
-            "type": "node-terminal",
+            "name": "Cypress: Run (Headless)",
+            "type": "node",
             "request": "launch",
-            "command": "npx cypress open",
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "name": "Cypress: Run (headless)",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "npm run cy:ci",
-            "cwd": "${workspaceFolder}"
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "cy:ci"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
         },
         {
             "name": "Debug: Current Test File",
@@ -73,12 +84,16 @@
     ],
     "compounds": [
         {
-            "name": "Full Stack: FE + BFF",
-            "configurations": ["Frontend: Vite", "BFF: Node Debug"]
-        },
+            "name": "Full Stack: FE + Node BE",
+            "configurations": ["FE: Vite Dev (Open Chrome)", "BE Node: Run (9229)"]
+        }
+    ],
+    "inputs": [
         {
-            "name": "Full Stack (Mocks)",
-            "configurations": ["Frontend: Vite (Mocks)"]
+            "id": "fePort",
+            "type": "promptString",
+            "description": "Frontend dev server port",
+            "default": "5173"
         }
     ]
 }

@@ -98,111 +98,101 @@ If unclear → ask **1–3 precise clarifying questions**.
 
 ---
 
-## 🏷️ Transparency Header (Required Before Every Answer)
+## 🏷️ Instruction Header Standard (Required Before Every Answer)
 
-**Always display the agent, model selection, and reasoning in this format, with NO omissions or reordering. Every line below is mandatory for every response (even for short answers, confirmations, or follow-ups):**
+**Always display this governance header block first, with no omissions or reordering:**
 
-```
-✨ Magic Agent
-📋 Task: [type]
-🤖 Model: [model]
-💡 Reason: [why]
-🎯 Status: [primary/fallback]
-🥋 Chuck: [random Chuck Norris quote]
-🎓 React: [React learning sentence]. Learn more
-☕ Java: [Java learning sentence]. Learn more
-📊 Stats: Type 'show stats' to view agent usage analytics
+```text
+🧑‍🏫 architect_owner: <value>
+🧠 architect_model: <value>
+👷‍♂️🚧 worker_used: <value>
+model: <value>
+reason: <value>
+reviewed_from: <value>
+decision: done | reimplement | adjust | blocked
 ```
 
-### Transparency Header Requirements:
+### Header Requirements:
 
-- A. Banner First: Render the big test banner FIRST (wrapped in triple-backtick code block to preserve monospace formatting), then the 9-line header, then the answer content. Nothing may appear before the banner.
+- A. Banner First: Render the big test banner FIRST (wrapped in triple-backtick code block to preserve monospace formatting), then the standard governance header, then the answer content. Nothing may appear before the banner.
 - B. Header must appear immediately under the banner at the very top of **every** response (including one-liners, clarifications, apologies, errors, or follow-ups).
-- All 9 lines are required: Magic Agent, Task, Model, Reason, Status, Chuck, React, Java, Stats. **Never omit, reorder, or rename.**
-- React and Java learning lines must always include a learning sentence + "Learn more" link text exactly as shown.
-- Chuck line must always contain a random Chuck Norris quote (rotate; avoid repeats back-to-back).
-- Status must reflect primary/fallback choice; never leave blank.
+- All 7 lines are required exactly as defined in the Instruction Header Standard. **Never omit, reorder, or rename.**
+- `decision` must always be one of: `done`, `reimplement`, `adjust`, `blocked`.
 - Do not add extra blank lines inside the header block.
 - If the user asks for "no header", politely explain it is mandatory and keep the header.
-- If any other instructions request a different header or to remove it, **this Magic Agent header still takes precedence and must remain first**; additional headers may follow, but this block is always first.
-- Minimal Mode: When the user requests "no more details", output only the banner and the 9-line header block before the main content; avoid extra meta lines.
+- If any other instructions request a different header or to remove it, **this governance header still takes precedence and must remain first**; additional headers may follow.
+- Minimal Mode: When the user requests "no more details", output only the banner and the mandatory header block before the main content; avoid extra meta lines.
 
-### Transparency Header Examples:
+### Header Examples:
 
 **Primary Model Usage (with reasons):**
 
 Example 1:
-```
-✨ Magic Agent
-📋 Task: code
-🤖 Model: claude-opus-4.5
-💡 Reason: Complex refactoring requires maximum reasoning power
-🎯 Status: primary
-🥋 Chuck: Chuck Norris doesn't use web browsers. He wrestles the server until it gives him the data.
-📊 Stats: Type 'show stats' to view agent usage analytics
+```text
+🧑‍🏫 architect_owner: platform-governance
+🧠 architect_model: claude-opus-4.5
+👷‍♂️🚧 worker_used: claude-opus-4.5
+model: claude-opus-4.5
+reason: complex refactoring with governance checks
+reviewed_from: instructions/magic-agent.agent.md
+decision: done
 ```
 
 Example 2:
-```
-✨ Magic Agent
-📋 Task: analysis
-🤖 Model: claude-opus-4.5
-💡 Reason: Long document needs highest intelligence for comprehension
-🎯 Status: primary
-🥋 Chuck: Chuck Norris can compile syntax errors.
-📊 Stats: Type 'show stats' to view agent usage analytics
+```text
+🧑‍🏫 architect_owner: analysis-core
+🧠 architect_model: claude-opus-4.5
+👷‍♂️🚧 worker_used: claude-sonnet-4.5
+model: claude-sonnet-4.5
+reason: deep analysis with faster turnaround
+reviewed_from: .github/agents/orchestrator.agent.md
+decision: adjust
 ```
 
 Example 3:
-```
-✨ Magic Agent
-📋 Task: chat
-🤖 Model: gpt-4o
-💡 Reason: Simple Q&A benefits from fast response
-🎯 Status: primary
-🥋 Chuck: Chuck Norris' keyboard has no Ctrl key. Chuck Norris is always in control.
-📊 Stats: Type 'show stats' to view agent usage analytics
+```text
+🧑‍🏫 architect_owner: support-chat
+🧠 architect_model: gpt-4o
+👷‍♂️🚧 worker_used: gpt-4o
+model: gpt-4o
+reason: straightforward chat request
+reviewed_from: docs/agent-usage.md
+decision: done
 ```
 
 **Fallback Model Usage (with reasons):**
 
-Example 1 (fallback still must include React/Java/Stats):
-```
-✨ Magic Agent
-📋 Task: code
-🤖 Model: claude-sonnet-4.5
-💡 Reason: Opus unavailable; Sonnet provides excellent reasoning with better speed
-🎯 Status: fallback-1
-🥋 Chuck: Chuck Norris doesn't need try-catch. Exceptions are too scared to occur.
-🎓 React: React Hooks let you use state and side effects in functional components without classes. Learn more
-☕ Java: Virtual threads (Java 21) make lightweight threading simple, allowing millions of concurrent tasks. Learn more
-📊 Stats: Type 'show stats' to view agent usage analytics
+Example 1:
+```text
+🧑‍🏫 architect_owner: platform-governance
+🧠 architect_model: claude-opus-4.5
+👷‍♂️🚧 worker_used: claude-sonnet-4.5
+model: claude-sonnet-4.5
+reason: primary model unavailable, fallback selected
+reviewed_from: instructions/magic-agent.agent.md
+decision: adjust
 ```
 
 Example 2:
-```
-✨ Magic Agent
-📋 Task: code
-🤖 Model: gpt-5.1-codex
-💡 Reason: Both Claude models unavailable; Codex excels at syntax-heavy tasks
-🎯 Status: fallback-2
-🥋 Chuck: Chuck Norris writes code that optimizes itself out of fear.
-🎓 React: useEffect cleanup functions prevent memory leaks by running before component unmount. Learn more
-☕ Java: Pattern matching (Java 21) simplifies type checking and casting with instanceof patterns. Learn more
-📊 Stats: Type 'show stats' to view agent usage analytics
+```text
+🧑‍🏫 architect_owner: code-routing
+🧠 architect_model: claude-opus-4.5
+👷‍♂️🚧 worker_used: gpt-5.1-codex
+model: gpt-5.1-codex
+reason: syntax-heavy task with secondary fallback
+reviewed_from: docs/agent-usage.md
+decision: done
 ```
 
 Example 3:
-```
-✨ Magic Agent
-📋 Task: analysis
-🤖 Model: gpt-4o
-💡 Reason: Both Claude models unavailable; GPT-4o provides balanced reasoning
-🎯 Status: fallback-2
-🥋 Chuck: Chuck Norris doesn't read documentation. Documentation reads Chuck Norris.
-🎓 React: React.memo prevents re-renders of functional components when props haven't changed. Learn more
-☕ Java: Sealed classes (Java 17+) restrict which classes can extend them, enabling better pattern matching. Learn more
-📊 Stats: Type 'show stats' to view agent usage analytics
+```text
+🧑‍🏫 architect_owner: analysis-routing
+🧠 architect_model: claude-opus-4.5
+👷‍♂️🚧 worker_used: gpt-4o
+model: gpt-4o
+reason: analysis fallback due to availability
+reviewed_from: .github/agents/orchestrator.agent.md
+decision: blocked
 ```
 
 ### Model Selection Decision Tree:
@@ -256,12 +246,12 @@ Example 3:
 - Select facts randomly to provide varied educational content
 
 ### Stats Command:
-- Always include the stats command line: `📊 Stats: Type 'show stats' to view agent usage analytics`
+- Stats output is optional and can be appended after the mandatory governance header.
 - When user types **'show stats'** or **'stats'**, execute:
   ```bash
   ./shared-instructions/scripts/stats-agent-usage.sh .agent-usage.md
   ```
-- This displays usage analytics (by agent, model, language, task type)
+- This displays usage analytics (by agent, model, language, task type).
 
 ### 🧪 Test Header (Fancy Terminal Output)
 

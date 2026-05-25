@@ -2,90 +2,143 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Dev Server",
+            "label": "FE: Install Dependencies",
+            "type": "shell",
+            "command": "npm install",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "FE: Start Vite Dev",
             "type": "shell",
             "command": "npm run dev",
-            "group": { "kind": "build", "isDefault": true },
-            "problemMatcher": [],
-            "isBackground": true
-        },
-        {
-            "label": "Dev Server (Mocks)",
-            "type": "shell",
-            "command": "npm run dev:mock",
             "group": "build",
             "problemMatcher": [],
             "isBackground": true
         },
         {
-            "label": "Build",
-            "type": "shell",
-            "command": "npm run build",
-            "group": "build",
-            "problemMatcher": ["$tsc"]
-        },
-        {
-            "label": "Run Tests",
+            "label": "FE: Run Tests",
             "type": "shell",
             "command": "npm test",
-            "group": { "kind": "test", "isDefault": true },
-            "problemMatcher": []
-        },
-        {
-            "label": "Cypress: E2E (headless)",
-            "type": "shell",
-            "command": "npm run cy:ci",
             "group": "test",
             "problemMatcher": []
         },
         {
-            "label": "Cypress: Open",
+            "label": "Node BE: Install Dependencies",
             "type": "shell",
-            "command": "npx cypress open",
-            "group": "test",
+            "command": "npm install",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Node BE: Start Dev (Inspect 9229)",
+            "type": "shell",
+            "command": "npm run dev",
+            "options": {
+                "env": {
+                    "NODE_OPTIONS": "--inspect=9229"
+                }
+            },
+            "group": "build",
             "problemMatcher": [],
             "isBackground": true
         },
         {
-            "label": "Lint",
+            "label": "Node BE: Run Tests",
+            "type": "shell",
+            "command": "npm test",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Java: Build (Wrapper Auto)",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "if [ -x ./mvnw ]; then ./mvnw -q -DskipTests package; elif [ -x ./gradlew ]; then ./gradlew -q build -x test; elif command -v mvn >/dev/null 2>&1; then mvn -q -DskipTests package; elif command -v gradle >/dev/null 2>&1; then gradle -q build -x test; else echo 'No mvnw/gradlew or global Maven/Gradle found. Add a wrapper or install Maven/Gradle.'; exit 1; fi"
+            ],
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Java: Run App (Wrapper Auto)",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "if [ -x ./mvnw ]; then ./mvnw spring-boot:run; elif [ -x ./gradlew ]; then ./gradlew bootRun; elif command -v mvn >/dev/null 2>&1; then mvn spring-boot:run; elif command -v gradle >/dev/null 2>&1; then gradle bootRun; else echo 'No mvnw/gradlew or global Maven/Gradle found. Add a wrapper or install Maven/Gradle.'; exit 1; fi"
+            ],
+            "group": "build",
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "Tomcat: Start Hook (Placeholder)",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-lc",
+                "echo 'Placeholder task: wire your Tomcat startup command here (for example ./scripts/start-tomcat.sh). Port 5005 should expose JPDA debug attach.'"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "FE: Lint",
             "type": "shell",
             "command": "npm run lint",
             "group": "test",
             "problemMatcher": ["$eslint-stylish"]
         },
         {
-            "label": "Lint: Fix",
+            "label": "FE: Typecheck",
             "type": "shell",
-            "command": "npm run lint -- --fix",
-            "group": "test",
-            "problemMatcher": ["$eslint-stylish"]
-        },
-        {
-            "label": "Type Check",
-            "type": "shell",
-            "command": "npx tsc --noEmit",
+            "command": "npm run typecheck",
             "group": "test",
             "problemMatcher": ["$tsc"]
         },
         {
-            "label": "Format: Check",
+            "label": "FE: Format Check",
             "type": "shell",
-            "command": "npx prettier --check .",
+            "command": "npm run format:check",
             "group": "test",
             "problemMatcher": []
         },
         {
-            "label": "Format: Fix",
+            "label": "FE: Format Fix",
             "type": "shell",
-            "command": "npx prettier --write .",
+            "command": "npm run format:fix",
             "group": "build",
             "problemMatcher": []
         },
         {
-            "label": "Quality Gate",
-            "dependsOn": ["Type Check", "Lint", "Run Tests"],
-            "dependsOrder": "parallel",
+            "label": "Cypress: Open",
+            "type": "shell",
+            "command": "npm run cy:open",
             "group": "test",
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "Cypress: Run (Headless)",
+            "type": "shell",
+            "command": "npm run cy:ci",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Quality Gate (FE/Node quick)",
+            "dependsOn": [
+                "FE: Lint",
+                "FE: Typecheck",
+                "FE: Run Tests"
+            ],
+            "dependsOrder": "sequence",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
             "problemMatcher": []
         }
     ]
