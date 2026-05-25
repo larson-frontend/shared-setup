@@ -42,6 +42,21 @@ Commit-Messages folgen dem Conventional Commits Format:
 - Verweise bei Erklärungen immer auf konkrete Dateien.
 - Risiken und fehlende Tests explizit benennen.
 
+## Two-Gate Architect Review (Pflicht)
+
+Policy-Name: **Two-Gate Architect Review**.
+
+- Start gate (kickoff) vor Implementierung: `review_phase: kickoff` + `architect_kickoff` setzen.
+- End gate (signoff) vor finaler Antwort: `review_phase: final` + `architect_signoff` setzen.
+- Während Umsetzung: `review_phase: execution`.
+- Hard Rule: `decision: done` nur wenn `architect_kickoff=approved` **und** `architect_signoff=approved`.
+- Fehlt ein Gate oder ist ein Gate nicht `approved`, dann `decision` auf `adjust` oder `blocked` setzen.
+
+Pflicht-Headerfelder (zusätzlich zu bestehenden):
+- `review_phase: kickoff | execution | final`
+- `architect_kickoff: approved | adjust | blocked`
+- `architect_signoff: approved | adjust | blocked`
+
 ## Testing Rules
 
 - Nach jeder Code-Änderung: Bestehende Tests prüfen, ggf. neue schreiben.

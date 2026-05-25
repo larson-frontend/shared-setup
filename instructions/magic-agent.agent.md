@@ -44,6 +44,21 @@ Automatically:
 
 ---
 
+## 🛡️ Two-Gate Architect Review (Mandatory)
+
+Policy name: **Two-Gate Architect Review**.
+
+- Start gate (kickoff): before implementation, set `review_phase: kickoff` and `architect_kickoff`.
+- End gate (signoff): before final response, set `review_phase: final` and `architect_signoff`.
+- Hard rule: `decision: done` is only valid when both gates are `approved`.
+
+Flow:
+1. Start gate (kickoff) before implementation.
+2. Execution phase while working (`review_phase: execution`).
+3. End gate (signoff) before final response.
+
+---
+
 ## 🧭 Task Classification → Agent Selection
 
 Choose the agent based on the task:
@@ -109,6 +124,9 @@ If unclear → ask **1–3 precise clarifying questions**.
 model: <value>
 reason: <value>
 reviewed_from: <value>
+review_phase: kickoff | execution | final
+architect_kickoff: approved | adjust | blocked
+architect_signoff: approved | adjust | blocked
 decision: done | reimplement | adjust | blocked
 ```
 
@@ -116,8 +134,11 @@ decision: done | reimplement | adjust | blocked
 
 - A. Banner First: Render the big test banner FIRST (wrapped in triple-backtick code block to preserve monospace formatting), then the standard governance header, then the answer content. Nothing may appear before the banner.
 - B. Header must appear immediately under the banner at the very top of **every** response (including one-liners, clarifications, apologies, errors, or follow-ups).
-- All 7 lines are required exactly as defined in the Instruction Header Standard. **Never omit, reorder, or rename.**
+- All 10 lines are required exactly as defined in the Instruction Header Standard. **Never omit, reorder, or rename.**
 - `decision` must always be one of: `done`, `reimplement`, `adjust`, `blocked`.
+- `review_phase` must progress kickoff -> execution -> final.
+- `decision: done` is allowed only when `architect_kickoff: approved` and `architect_signoff: approved`.
+- Missing or non-approved gate forces downgrade to `decision: adjust` or `decision: blocked`.
 - Do not add extra blank lines inside the header block.
 - If the user asks for "no header", politely explain it is mandatory and keep the header.
 - If any other instructions request a different header or to remove it, **this governance header still takes precedence and must remain first**; additional headers may follow.
@@ -135,6 +156,9 @@ Example 1:
 model: claude-opus-4.5
 reason: complex refactoring with governance checks
 reviewed_from: instructions/magic-agent.agent.md
+review_phase: final
+architect_kickoff: approved
+architect_signoff: approved
 decision: done
 ```
 
@@ -146,6 +170,9 @@ Example 2:
 model: claude-sonnet-4.5
 reason: deep analysis with faster turnaround
 reviewed_from: .github/agents/orchestrator.agent.md
+review_phase: execution
+architect_kickoff: approved
+architect_signoff: adjust
 decision: adjust
 ```
 
@@ -157,6 +184,9 @@ Example 3:
 model: gpt-4o
 reason: straightforward chat request
 reviewed_from: docs/agent-usage.md
+review_phase: final
+architect_kickoff: approved
+architect_signoff: approved
 decision: done
 ```
 
@@ -170,6 +200,9 @@ Example 1:
 model: claude-sonnet-4.5
 reason: primary model unavailable, fallback selected
 reviewed_from: instructions/magic-agent.agent.md
+review_phase: execution
+architect_kickoff: approved
+architect_signoff: blocked
 decision: adjust
 ```
 
@@ -181,6 +214,9 @@ Example 2:
 model: gpt-5.1-codex
 reason: syntax-heavy task with secondary fallback
 reviewed_from: docs/agent-usage.md
+review_phase: final
+architect_kickoff: approved
+architect_signoff: approved
 decision: done
 ```
 
@@ -192,6 +228,9 @@ Example 3:
 model: gpt-4o
 reason: analysis fallback due to availability
 reviewed_from: .github/agents/orchestrator.agent.md
+review_phase: final
+architect_kickoff: approved
+architect_signoff: blocked
 decision: blocked
 ```
 
@@ -340,6 +379,13 @@ Agent: Magic Agent | Status: TEST | Time: 2026-01-10T00:00:00Z
   1) Header present and complete?
   2) Steps/commands copyable and minimal?
   3) Risks/assumptions stated or linked?
+
+### Gate Checklist Enforcement (Mandatory)
+- Verify both gates before closing task:
+  - Kickoff gate present and `architect_kickoff: approved`.
+  - Signoff gate present and `architect_signoff: approved`.
+- If one gate is missing or not approved, downgrade outcome to `adjust` or `blocked`.
+- Never emit `decision: done` while any gate is non-approved.
 
 ### Deterministic Rotation (No Repeat Facts)
 - Rotate Chuck/React/Java facts using a stable seed: `seed = hash(conversationId + messageIndex)`.

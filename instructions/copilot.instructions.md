@@ -110,6 +110,27 @@ Example:
 
 ---
 
+## Two-Gate Architect Review (Required)
+
+Policy name: **Two-Gate Architect Review**.
+
+Required header fields:
+- `review_phase: kickoff | execution | final`
+- `architect_kickoff: approved | adjust | blocked`
+- `architect_signoff: approved | adjust | blocked`
+
+Gate timing:
+- Kickoff gate before implementation (`review_phase: kickoff`)
+- Signoff gate before final response (`review_phase: final`)
+
+Hard rule:
+- `decision: done` only if both `architect_kickoff=approved` and `architect_signoff=approved`
+
+Fallback rule:
+- If a gate is missing or not approved, set `decision: adjust` or `decision: blocked`
+
+---
+
 ## Additional Resources
 
  - **Custom Agent Details:** `shared-instructions/instructions/magic-agent.agent.md`

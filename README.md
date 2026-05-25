@@ -76,8 +76,21 @@ Alle Agent-Antworten und Governance-Beispiele sollen denselben Header-Block verw
 model: <value>
 reason: <value>
 reviewed_from: <value>
+review_phase: kickoff | execution | final
+architect_kickoff: approved | adjust | blocked
+architect_signoff: approved | adjust | blocked
 decision: done | reimplement | adjust | blocked
 ```
+
+### Two-Gate Architect Review (Pflicht)
+
+Policy-Name: **Two-Gate Architect Review**.
+
+- Start gate (kickoff) vor Implementierung: `review_phase: kickoff` und `architect_kickoff` setzen.
+- End gate (signoff) vor finaler Antwort: `review_phase: final` und `architect_signoff` setzen.
+- Execution-Phase waehrend der Umsetzung: `review_phase: execution`.
+- Hard Rule: `decision: done` nur wenn `architect_kickoff=approved` und `architect_signoff=approved`.
+- Wenn ein Gate fehlt oder nicht `approved` ist: `decision` auf `adjust` oder `blocked`.
 
 ### Quickstart fuer neue Teammitglieder
 

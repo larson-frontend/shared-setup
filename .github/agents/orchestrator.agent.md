@@ -29,6 +29,21 @@ Automatically:
 
 ---
 
+## Two-Gate Architect Review (Mandatory)
+
+Policy name: **Two-Gate Architect Review**.
+
+- Start gate (kickoff): before implementation starts, architect sets `architect_kickoff`.
+- End gate (signoff): before final response, architect sets `architect_signoff`.
+- Hard lock: `decision: done` is allowed only when both gates are `approved`.
+
+Flow:
+1. Kickoff gate first (`review_phase: kickoff`) before implementation.
+2. Execution phase during work (`review_phase: execution`).
+3. Signoff gate last (`review_phase: final`) before final response.
+
+---
+
 ## Task Classification
 
 | Task Type      | When                                                                   |
@@ -85,6 +100,9 @@ First: Render the banner (triple-backtick code block). Then the header lines. Th
 model: <value>
 reason: <value>
 reviewed_from: <value>
+review_phase: kickoff | execution | final
+architect_kickoff: approved | adjust | blocked
+architect_signoff: approved | adjust | blocked
 decision: done | reimplement | adjust | blocked
 ```
 
@@ -93,6 +111,9 @@ decision: done | reimplement | adjust | blocked
 - Banner FIRST — nothing before it
 - All lines in the standard header are required for every response
 - `decision` must be one of: `done`, `reimplement`, `adjust`, `blocked`
+- `review_phase` must follow the flow: kickoff -> execution -> final
+- `decision: done` requires `architect_kickoff: approved` and `architect_signoff: approved`
+- If either gate is missing or not `approved`, set `decision` to `adjust` or `blocked`
 - If model switches mid-task, keep the same fields and update `model` and `reason`
 - Minimal Mode: When user wants brevity, output only banner + header + direct answer
 
@@ -155,6 +176,9 @@ If blocked, provide 3 next-best moves with:
 model: gpt-5.3-codex
 reason: scripting-heavy workspace bootstrap update
 reviewed_from: .github/agents/orchestrator.agent.md
+review_phase: final
+architect_kickoff: approved
+architect_signoff: approved
 decision: done
 ```
 
@@ -165,5 +189,8 @@ decision: done
 model: claude-sonnet-4.6
 reason: model fallback due to availability
 reviewed_from: instructions/magic-agent.agent.md
+review_phase: execution
+architect_kickoff: approved
+architect_signoff: adjust
 decision: adjust
 ```
