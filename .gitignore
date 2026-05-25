@@ -1,2 +1,4 @@
 # Magic Agent Usage Tracking (local only)
 .agent-usage.md
+
+node_modules/
