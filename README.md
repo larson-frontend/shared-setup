@@ -88,6 +88,13 @@ decision: done | reimplement | adjust | blocked
 5. Fuer Java/Tomcat zuerst Java: Build (Wrapper Auto) pruefen, dann Java/Tomcat: Attach (5005) verwenden; optional den Platzhalter-Task Tomcat: Start Hook (Placeholder) auf euer Startskript mappen.
 6. Fuer Release-Automation auf main reicht der Workflow Release; lokal kann npm run release:dry zur Vorpruefung genutzt werden.
 
+## Semantic Release Checklist
+
+- main branch protection ist kompatibel mit Release-Commits
+- Workflow-Permissions enthalten `contents: write`, `issues: write`, `pull-requests: write`, `packages: write`
+- Token-Verhalten: `GH_TOKEN` ist optional und faellt auf `GITHUB_TOKEN` zurueck
+- Dry-Run lokal: `npm run release:dry`
+
 ### 1. Repo clonen
 
 ```bash
