@@ -9,6 +9,7 @@ Minimal steps only. Pick your OS and run.
 ./shared-instructions/scripts/install-auto.sh
 shared-instructions/scripts/init-shared-instructions-vscode.sh --non-interactive
 shared-instructions/scripts/verify-install.sh --project-root .
+shared-instructions/scripts/doctor.sh --ci
 ```
 
 ## Windows
@@ -16,6 +17,7 @@ shared-instructions/scripts/verify-install.sh --project-root .
 powershell -ExecutionPolicy Bypass -File shared-instructions/scripts/install-auto.ps1
 powershell -ExecutionPolicy Bypass -File shared-instructions/scripts/init-shared-instructions-vscode.ps1 -NonInteractive
 bash shared-instructions/scripts/verify-install.sh --project-root .
+bash shared-instructions/scripts/doctor.sh --ci
 ```
 
 ## Finish

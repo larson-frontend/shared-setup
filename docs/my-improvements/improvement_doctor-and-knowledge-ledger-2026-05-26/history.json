@@ -1,0 +1,10 @@
+[
+  {
+    "step": "doctor-ledger-implementation",
+    "date": "2026-05-26T00:00:00Z",
+    "action": "implementation",
+    "details": "Doctor Script, Matrix-Workflow, zentrale Experience-Struktur und Policy-Updates umgesetzt",
+    "commit": "pending",
+    "repo": "shared-setup"
+  }
+]

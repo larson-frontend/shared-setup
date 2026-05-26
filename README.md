@@ -141,6 +141,18 @@ Die Dateien sind als Startpunkt gedacht. Passe sie an die Toolchain und Konventi
 ./shared-instructions/scripts/verify-install.sh --project-root .
 ```
 
+### 5. Setup Readiness diagnostizieren (kanonisch)
+
+```zsh
+./shared-instructions/scripts/doctor.sh --ci
+```
+
+Optional fuer Tooling/Automationen:
+
+```zsh
+./shared-instructions/scripts/doctor.sh --json
+```
+
 ---
 
 ## Was drin ist

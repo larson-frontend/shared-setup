@@ -1,0 +1,59 @@
+name: Doctor Matrix
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  doctor:
+    name: Doctor (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (if lockfile exists)
+        shell: bash
+        run: |
+          if [[ -f package-lock.json ]]; then
+            npm ci
+          else
+            echo "No package-lock.json found, skipping npm ci"
+          fi
+
+      - name: Bash syntax check
+        shell: bash
+        run: bash -n scripts/*.sh
+
+      - name: Run doctor (CI mode)
+        shell: bash
+        run: scripts/doctor.sh --ci
+
+  shellcheck:
+    name: Shellcheck (ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Lint doctor script
+        run: shellcheck scripts/doctor.sh

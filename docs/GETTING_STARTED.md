@@ -3,7 +3,7 @@
 # 🚀 Getting Started with Project Development
 
 > Complete setup guide from cloning repository to running the development stack
-> 
+>
 > **Note:** This is a template guide. Adjust paths and commands for your specific project.
 
 ---
@@ -73,6 +73,7 @@ Run the canonical post-install verification command after setup:
 
 ```bash
 ./shared-instructions/scripts/verify-install.sh --project-root .
+./shared-instructions/scripts/doctor.sh --ci
 ```
 
 ---
@@ -149,6 +150,7 @@ Use the canonical installer verifier to confirm setup is complete:
 
 ```bash
 ./shared-instructions/scripts/verify-install.sh --project-root .
+./shared-instructions/scripts/doctor.sh --ci
 ```
 
 Setup verification must pass before continuing.
@@ -436,7 +438,7 @@ docker-compose down                 # Stop all services
 ## 📞 Getting Help
 
 - **Copilot Chat**: Press `⌘ + I` (Mac) or `Ctrl + I` to ask the agent
-- **Documentation**: 
+- **Documentation**:
   - Shared: Check `shared-instructions/` directory
   - Project-specific: Check each project's README
 - **Tests**: Run test suite to verify your setup

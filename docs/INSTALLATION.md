@@ -37,16 +37,26 @@ shared-instructions/scripts/init-shared-instructions-vscode.sh --non-interactive
 shared-instructions/scripts/verify-install.sh --project-root .
 ```
 
+4) Run local readiness diagnostics
+```zsh
+shared-instructions/scripts/doctor.sh --ci
+```
+
+Optional JSON output:
+```zsh
+shared-instructions/scripts/doctor.sh --json
+```
+
 <p><strong><span style="color:red">Windows VS Code init (required):</span></strong></p>
 Windows (PowerShell):
 ```powershell
 powershell -ExecutionPolicy Bypass -File shared-instructions/scripts/init-shared-instructions-vscode.ps1 -NonInteractive
 ```
 
-4) Reload VS Code
+5) Reload VS Code
 - `Ctrl+Shift+P` → "Reload Window"
 
-5) Start using the agent
+6) Start using the agent
 - Open any file → press `Ctrl+I`
 - The agent uses `shared-instructions/instructions/copilot.instructions.md`
 

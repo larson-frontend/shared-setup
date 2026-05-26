@@ -157,6 +157,7 @@ workspace/
 
 ```zsh
 ./shared-instructions/scripts/verify-install.sh --project-root .
+./shared-instructions/scripts/doctor.sh --ci
 ```
 
 ---

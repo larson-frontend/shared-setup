@@ -68,6 +68,13 @@ Pflicht-Headerfelder (zusätzlich zu bestehenden):
 
 - Neue Features dokumentieren, wenn sie für andere relevant sind.
 - Änderungen an `.vscode/` oder `.github/` im PR begründen.
+- Zentrales Erfahrungswissen in `docs/my-experience/` pflegen.
+
+### Zentrales Experience Ledger (Pflicht)
+
+- Jede abgeschlossene Aufgabe aktualisiert sowohl den Kategorie-Ordner (`docs/my-features/`, `docs/my-improvements/`, `docs/my-defects/`, `docs/my-dep-upgrades/`) als auch den zentralen Index unter `docs/my-experience/`.
+- Vor jedem major Bugfix zuerst `docs/my-experience/severe-bug-history.md` konsultieren.
+- Schwere Bugs muessen nach Abschluss in `docs/my-experience/severe-bug-history.md` und `docs/my-experience/history.json` eingetragen werden.
 
 ### Feature- / Improvement- / Defect-Dokumentation
 

@@ -1,0 +1,10 @@
+[
+  {
+    "step": "experience-ledger-initialized",
+    "date": "2026-05-26T00:00:00Z",
+    "action": "documentation",
+    "details": "Zentrales my-experience Verzeichnis mit Overview, Severe-Bug-History und Regeln angelegt",
+    "commit": "pending",
+    "repo": "shared-setup"
+  }
+]
