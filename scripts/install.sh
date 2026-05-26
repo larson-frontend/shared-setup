@@ -77,9 +77,9 @@ run_install_verification() {
 
 setup_stats() {
   local PROJECT_DIR="$1"
-  
+
   print_info "Setting up agent usage tracking..."
-  
+
   # Create .agent-usage.md in project root
   cat > "$PROJECT_DIR/.agent-usage.md" << 'EOF'
 # Agent Usage Statistics
@@ -91,7 +91,7 @@ Auto-generated and managed by shared-instructions.
 [YYYY-MM-DD HH:MM] agent=AGENT_NAME task=TASK_TYPE model=MODEL_NAME status=STATUS lang=LANGUAGE desc=DESCRIPTION
 
 EOF
-  
+
   # Update .gitignore to exclude stats
   if [[ -f "$PROJECT_DIR/.gitignore" ]]; then
     if ! grep -q "\.agent-usage" "$PROJECT_DIR/.gitignore"; then
@@ -128,36 +128,36 @@ show_usage() {
 clone_and_link() {
   local repo_url="$1"
   local target_path="$2"
-  
+
   if [[ -z "$repo_url" ]]; then
     print_error "Repository URL required"
     show_usage
     exit 1
   fi
-  
+
   # Use global SHARED_INSTRUCTIONS_ROOT
   if [[ ! -d "$SHARED_INSTRUCTIONS_ROOT/instructions" ]]; then
     print_error "Could not locate shared-instructions at: $SHARED_INSTRUCTIONS_ROOT"
     exit 1
   fi
-  
+
   print_success "Using shared-instructions: $SHARED_INSTRUCTIONS_ROOT"
   echo ""
-  
+
   # Parse repo name if target not provided
   if [[ -z "$target_path" ]]; then
     target_path="${repo_url##*/}"
     target_path="${target_path%.git}"
   fi
-  
+
   # Expand ~
   target_path="${target_path/#\~/$HOME}"
-  
+
   echo "${YELLOW}🔄 Cloning...${NC}"
   echo "  Repository: $repo_url"
   echo "  Location: $target_path"
   echo ""
-  
+
   # Clone
   if git clone "$repo_url" "$target_path"; then
     print_success "Repository cloned"
@@ -165,28 +165,28 @@ clone_and_link() {
     print_error "Failed to clone repository"
     exit 1
   fi
-  
+
   cd "$target_path"
-  
+
   # Setup statistics
   setup_stats "$(pwd)"
-  
+
   echo ""
   echo "${YELLOW}🔗 Linking...${NC}"
-  
+
   # Create symlink
   if [[ -L shared-instructions ]]; then
     rm shared-instructions
     print_warning "Removed existing symlink"
   fi
-  
+
   if ln -s "$SHARED_INSTRUCTIONS_ROOT" shared-instructions; then
     print_success "Symlink created: shared-instructions"
   else
     print_error "Failed to create symlink"
     exit 1
   fi
-  
+
   run_install_verification "$(pwd)" "$SHARED_INSTRUCTIONS_ROOT"
 
   echo ""
@@ -215,50 +215,50 @@ clone_and_link() {
 
 link_only() {
   local project_path="$1"
-  
+
   if [[ -z "$project_path" ]]; then
     print_error "Project path required"
     show_usage
     exit 1
   fi
-  
+
   # Use global SHARED_INSTRUCTIONS_ROOT
   if [[ ! -d "$SHARED_INSTRUCTIONS_ROOT/instructions" ]]; then
     print_error "Could not locate shared-instructions at: $SHARED_INSTRUCTIONS_ROOT"
     exit 1
   fi
-  
+
   print_success "Using shared-instructions: $SHARED_INSTRUCTIONS_ROOT"
-  
+
   # Expand ~
   project_path="${project_path/#\~/$HOME}"
-  
+
   if [[ ! -d "$project_path" ]]; then
     print_error "Project directory not found: $project_path"
     exit 1
   fi
-  
+
   cd "$project_path"
-  
+
   # Setup statistics
   setup_stats "$(pwd)"
-  
+
   echo ""
   echo "${YELLOW}🔗 Linking...${NC}"
-  
+
   # Create symlink
   if [[ -L shared-instructions ]]; then
     rm shared-instructions
     print_warning "Removed existing symlink"
   fi
-  
+
   if ln -s "$SHARED_INSTRUCTIONS_ROOT" shared-instructions; then
     print_success "Symlink created: shared-instructions"
   else
     print_error "Failed to create symlink"
     exit 1
   fi
-  
+
   run_install_verification "$(pwd)" "$SHARED_INSTRUCTIONS_ROOT"
 
   echo ""
@@ -288,9 +288,9 @@ link_only() {
 # Main
 main() {
   print_header
-  
+
   MODE="$1"
-  
+
   case "$MODE" in
     --clone)
       clone_and_link "$2" "$3"

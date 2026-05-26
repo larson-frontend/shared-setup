@@ -144,13 +144,13 @@ detect_project_root() {
 
 check_prerequisites() {
   print_info "Checking prerequisites..."
-  
+
   local missing=()
-  
+
   if ! command -v git &>/dev/null; then
     missing+=("git")
   fi
-  
+
   if ! command -v zsh &>/dev/null; then
     print_warning "zsh not found, using current shell"
   fi
@@ -160,7 +160,7 @@ check_prerequisites() {
     echo "Please install them and try again."
     exit 1
   fi
-  
+
   print_success "All prerequisites met"
 }
 
@@ -170,11 +170,11 @@ clone_shared_instructions() {
   local shared_path="$shared_parent/shared-instructions"
 
   print_info "Cloning shared-instructions..."
-  
+
   # Check if already exists
   if [[ -d "$shared_path" ]]; then
     print_warning "shared-instructions already exists at: $shared_path"
-    
+
     # Try to update it
     print_info "Attempting to update existing installation..."
     if cd "$shared_path" && git pull origin "$BRANCH" &>/dev/null; then
@@ -235,7 +235,7 @@ initialize_vscode() {
   print_info "Initializing VS Code settings..."
 
   local init_script="$project_root/shared-instructions/scripts/init-shared-instructions-vscode.sh"
-  
+
   if [[ ! -x "$init_script" ]]; then
     chmod +x "$init_script" 2>/dev/null || true
   fi
@@ -245,7 +245,7 @@ initialize_vscode() {
     if [[ -n "$username" ]]; then
       args+=("--username" "$username")
     fi
-    
+
     if "$init_script" "${args[@]}"; then
       print_success "VS Code settings initialized"
     else
@@ -281,7 +281,7 @@ log_installation() {
   local username="${2:-Magic Agent}"
 
   local log_script="$project_root/shared-instructions/scripts/log-agent-usage.sh"
-  
+
   if [[ -x "$log_script" ]]; then
     "$log_script" \
       --agent "$username" \
@@ -295,7 +295,7 @@ log_installation() {
 
 print_next_steps() {
   local project_root="$1"
-  
+
   echo ""
   echo "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
   echo "${GREEN}║  ✓ Installation Complete!                                 ║${NC}"
