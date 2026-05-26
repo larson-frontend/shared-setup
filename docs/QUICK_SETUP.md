@@ -156,14 +156,7 @@ workspace/
 ## ✅ Verifizieren
 
 ```zsh
-# Symlink prüfen
-ls -la shared-instructions
-
-# Instruktionen lesen
-cat shared-instructions/instructions/copilot.instructions.md | head -10
-
-# VS Code Settings prüfen
-cat .vscode/settings.json | grep github.copilot
+./shared-instructions/scripts/verify-install.sh --project-root .
 ```
 
 ---

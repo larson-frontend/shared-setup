@@ -256,6 +256,26 @@ initialize_vscode() {
   fi
 }
 
+verify_installation() {
+  local project_root="$1"
+  local shared_path="$2"
+  local verifier="$shared_path/scripts/verify-install.sh"
+
+  print_info "Verifying installation..."
+
+  if [[ ! -f "$verifier" ]]; then
+    print_error "Verification script not found: $verifier"
+    exit 1
+  fi
+
+  if [[ ! -x "$verifier" ]]; then
+    chmod +x "$verifier" 2>/dev/null || true
+  fi
+
+  "$verifier" --project-root "$project_root" --shared-root "$shared_path"
+  print_success "Installation verification passed"
+}
+
 log_installation() {
   local project_root="$1"
   local username="${2:-Magic Agent}"
@@ -315,6 +335,9 @@ main() {
 
   # Initialize VS Code
   initialize_vscode "$project_root" "$USERNAME"
+
+  # Verify install state before final summary/logging
+  verify_installation "$project_root" "$shared_path"
 
   # Log the installation
   log_installation "$project_root" "$USERNAME"

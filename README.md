@@ -135,6 +135,12 @@ cp shared-instructions/.editorconfig dein-projekt/.editorconfig
 
 Die Dateien sind als Startpunkt gedacht. Passe sie an die Toolchain und Konventionen deines Teams an.
 
+### 4. Installation verifizieren (kanonisch)
+
+```zsh
+./shared-instructions/scripts/verify-install.sh --project-root .
+```
+
 ---
 
 ## Was drin ist

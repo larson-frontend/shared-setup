@@ -80,7 +80,7 @@ if [[ "$NON_INTERACTIVE" == true ]]; then
   TARGET_ABS=$(realpath "$TARGET_REPO" 2>/dev/null || true)
   [[ -z "$TARGET_ABS" || ! -d "$TARGET_ABS" ]] && { echo "Error: target repo not found: $TARGET_REPO" >&2; exit 1; }
 else
-  echo "Found repos:" 
+  echo "Found repos:"
   i=1
   for c in $candidates; do
     echo "  [$i] $(basename "$c")  -> $c"
@@ -177,6 +177,16 @@ case "$IDE_CHOICE" in
     exit 1
     ;;
 esac
+
+VERIFIER="$SHARED_ABS/scripts/verify-install.sh"
+if [[ ! -f "$VERIFIER" ]]; then
+  echo "Error: verification script not found: $VERIFIER" >&2
+  exit 1
+fi
+if [[ ! -x "$VERIFIER" ]]; then
+  chmod +x "$VERIFIER" 2>/dev/null || true
+fi
+"$VERIFIER" --project-root "$TARGET_ABS" --shared-root "$SHARED_ABS"
 
 # Final progress message
 echo "installation progress ..... ready!"

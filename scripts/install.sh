@@ -53,6 +53,28 @@ print_info() {
   echo "${BLUE}ℹ${NC} $1"
 }
 
+run_install_verification() {
+  local project_root="$1"
+  local shared_root="$2"
+  local verifier="$shared_root/scripts/verify-install.sh"
+
+  if [[ ! -f "$verifier" ]]; then
+    print_error "Verification script not found: $verifier"
+    exit 1
+  fi
+
+  if [[ ! -x "$verifier" ]]; then
+    chmod +x "$verifier" 2>/dev/null || true
+  fi
+
+  if "$verifier" --project-root "$project_root" --shared-root "$shared_root"; then
+    print_success "Installation verified"
+  else
+    print_error "Installation verification failed"
+    exit 1
+  fi
+}
+
 setup_stats() {
   local PROJECT_DIR="$1"
   
@@ -165,36 +187,30 @@ clone_and_link() {
     exit 1
   fi
   
-  # Verify
-  if [[ -d shared-instructions/instructions ]]; then
-    print_success "Installation verified"
-    
-    echo ""
-    echo "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
-    echo "${GREEN}║  ✓ Installation Complete!                             ║${NC}"
-    echo "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    echo "📁 Project: $(basename "$target_path")"
-    echo "📂 Location: $(pwd)"
-    echo "🔗 Symlink: shared-instructions → $SHARED_INSTRUCTIONS_ROOT"
-    echo ""
-    echo "${YELLOW}🔧 Next Steps:${NC}"
-    echo ""
-    echo "  1. Open in VS Code:"
-    echo "     ${BLUE}code .${NC}"
-    echo ""
-    echo "  2. Reload VS Code:"
-    echo "     ${BLUE}Ctrl+Shift+P → 'Reload Window'${NC}"
-    echo ""
-    echo "  3. Start using Magic Agent:"
-    echo "     ${BLUE}Press Ctrl+I in any file${NC}"
-    echo ""
-    echo "${GREEN}Happy coding! 🚀${NC}"
-    echo ""
-  else
-    print_error "Installation verification failed"
-    exit 1
-  fi
+  run_install_verification "$(pwd)" "$SHARED_INSTRUCTIONS_ROOT"
+
+  echo ""
+  echo "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
+  echo "${GREEN}║  ✓ Installation Complete!                             ║${NC}"
+  echo "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
+  echo ""
+  echo "📁 Project: $(basename "$target_path")"
+  echo "📂 Location: $(pwd)"
+  echo "🔗 Symlink: shared-instructions → $SHARED_INSTRUCTIONS_ROOT"
+  echo ""
+  echo "${YELLOW}🔧 Next Steps:${NC}"
+  echo ""
+  echo "  1. Open in VS Code:"
+  echo "     ${BLUE}code .${NC}"
+  echo ""
+  echo "  2. Reload VS Code:"
+  echo "     ${BLUE}Ctrl+Shift+P → 'Reload Window'${NC}"
+  echo ""
+  echo "  3. Start using Magic Agent:"
+  echo "     ${BLUE}Press Ctrl+I in any file${NC}"
+  echo ""
+  echo "${GREEN}Happy coding! 🚀${NC}"
+  echo ""
 }
 
 link_only() {
@@ -243,36 +259,30 @@ link_only() {
     exit 1
   fi
   
-  # Verify
-  if [[ -d shared-instructions/instructions ]]; then
-    print_success "Linking verified"
-    
-    echo ""
-    echo "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
-    echo "${GREEN}║  ✓ Project Linked!                                    ║${NC}"
-    echo "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    echo "📁 Project: $(basename "$(pwd)")"
-    echo "📂 Location: $(pwd)"
-    echo "🔗 Symlink: shared-instructions → $SHARED_INSTRUCTIONS_ROOT"
-    echo ""
-    echo "${YELLOW}🔧 Next Steps:${NC}"
-    echo ""
-    echo "  1. Open in VS Code:"
-    echo "     ${BLUE}code .${NC}"
-    echo ""
-    echo "  2. Reload VS Code:"
-    echo "     ${BLUE}Ctrl+Shift+P → 'Reload Window'${NC}"
-    echo ""
-    echo "  3. Start using Magic Agent:"
-    echo "     ${BLUE}Press Ctrl+I in any file${NC}"
-    echo ""
-    echo "${GREEN}Happy coding! 🚀${NC}"
-    echo ""
-  else
-    print_error "Linking verification failed"
-    exit 1
-  fi
+  run_install_verification "$(pwd)" "$SHARED_INSTRUCTIONS_ROOT"
+
+  echo ""
+  echo "${GREEN}╔════════════════════════════════════════════════════════╗${NC}"
+  echo "${GREEN}║  ✓ Project Linked!                                    ║${NC}"
+  echo "${GREEN}╚════════════════════════════════════════════════════════╝${NC}"
+  echo ""
+  echo "📁 Project: $(basename "$(pwd)")"
+  echo "📂 Location: $(pwd)"
+  echo "🔗 Symlink: shared-instructions → $SHARED_INSTRUCTIONS_ROOT"
+  echo ""
+  echo "${YELLOW}🔧 Next Steps:${NC}"
+  echo ""
+  echo "  1. Open in VS Code:"
+  echo "     ${BLUE}code .${NC}"
+  echo ""
+  echo "  2. Reload VS Code:"
+  echo "     ${BLUE}Ctrl+Shift+P → 'Reload Window'${NC}"
+  echo ""
+  echo "  3. Start using Magic Agent:"
+  echo "     ${BLUE}Press Ctrl+I in any file${NC}"
+  echo ""
+  echo "${GREEN}Happy coding! 🚀${NC}"
+  echo ""
 }
 
 # Main

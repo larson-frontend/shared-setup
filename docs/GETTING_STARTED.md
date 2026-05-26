@@ -69,6 +69,12 @@ ls -la shared-instructions/
 - Replace `<project-1>`, `<project-2>` with your actual project names
 - Both projects symlink to the same `shared-instructions/` for consistency
 
+Run the canonical post-install verification command after setup:
+
+```bash
+./shared-instructions/scripts/verify-install.sh --project-root .
+```
+
 ---
 ## 🗂️ Step 3: Setup Infrastructure (If Required)
 
