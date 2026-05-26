@@ -143,9 +143,17 @@ npm run dev
 # Output will show the running URL (typically http://localhost:3000 or 5173)
 ```
 
-## 🧪 Step 6: Verify Full Stack
+## 🧪 Step 6: Verify Installation Setup
 
-### Health Checks
+Use the canonical installer verifier to confirm setup is complete:
+
+```bash
+./shared-instructions/scripts/verify-install.sh --project-root .
+```
+
+Setup verification must pass before continuing.
+
+### Basic Setup Verification (Post-Install Smoke Checks)
 
 **Backend verification:**
 ```bash
@@ -161,9 +169,11 @@ open http://localhost:3000  # Or your frontend port
 # Should load without errors
 ```
 
-### Run Tests
+### Project-Specific Runtime and Test Validation (After Setup Verification)
 
-**Run tests in each project:**
+After setup verification passes, run runtime, unit, integration, and E2E tests according to the target repository's own standards.
+
+**Run project-specific tests in each project:**
 
 ```bash
 # Backend tests
@@ -178,7 +188,7 @@ npm test                    # Most npm projects
 # OR: npm run test:all     # If using custom test scripts
 ```
 
-**All tests should pass before proceeding.**
+Setup verification is the install gate; project-specific tests are executed afterward.
 
 ---
 
@@ -244,6 +254,7 @@ npm run ios:open
 ## 📱 Step 9: Deployment & Publication (If Applicable)
 
 **This section applies only if you're preparing for production deployment or app store publication.**
+This is a release/deployment gate, not the install/setup verification step.
 
 ### Pre-Deployment Checklist
 
