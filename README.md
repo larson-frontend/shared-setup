@@ -108,6 +108,12 @@ Policy-Name: **Two-Gate Architect Review**.
 - Token-Verhalten: `GH_TOKEN` ist optional und faellt auf `GITHUB_TOKEN` zurueck
 - Dry-Run lokal: `npm run release:dry`
 
+## Dependency Maintenance (Renovate)
+
+- Dieses Repository nutzt Renovate mit Basisregel `config:recommended`.
+- Non-major Updates werden pro Oekosystem gebuendelt (npm und GitHub Actions), Major Updates separat.
+- Lockfile-Maintenance ist aktiviert und laeuft woechentlich.
+
 ### 1. Repo clonen
 
 ```bash

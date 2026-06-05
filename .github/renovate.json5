@@ -1,0 +1,29 @@
+{
+  extends: ["config:recommended"],
+  timezone: "Europe/Berlin",
+  enabledManagers: ["npm", "github-actions"],
+  dependencyDashboard: true,
+  separateMajorMinor: true,
+  labels: ["dependencies", "renovate"],
+  semanticCommits: "enabled",
+  semanticCommitType: "chore",
+  semanticCommitScope: "deps",
+  prHourlyLimit: 2,
+  prConcurrentLimit: 10,
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: ["before 3am on monday"],
+  },
+  packageRules: [
+    {
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+      groupName: "npm non-major updates",
+    },
+    {
+      matchManagers: ["github-actions"],
+      matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+      groupName: "github-actions non-major updates",
+    },
+  ],
+}
